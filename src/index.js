@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron');
+
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,7 +12,15 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    // allows us to access node js globals directly in our front-end code
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    }
   });
+
+  require("@electron/remote/main").enable(mainWindow.webContents)
+  require('@electron/remote/main').initialize()
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
